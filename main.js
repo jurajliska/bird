@@ -1,4 +1,5 @@
 let player
+let cursors
 
 function preload() {
     this.load.image("sky", "assets/sky.png");
@@ -18,10 +19,19 @@ function create() {
         frameRate: 10,
         repeat: -1
     });
+
+    cursors = this.input.keyboard.createCursorKeys();
 }
 
 function update() {
-    //player.anims.play("fly", true);
+    player.anims.play("fly", true);
+    
+    if (cursors.space.isDown) {
+        player.setVelocityY(-100);
+        player.setAngle(-45);
+    } else {
+        player.setAngle(0);
+    }
 }
 
 var config = {
