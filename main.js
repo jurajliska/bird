@@ -1,17 +1,19 @@
-let player
-let cursors
+let player;
+let walls;
+let cursors;
 
 function preload() {
     this.load.image("sky", "assets/sky.png");
-    this.load.spritesheet("bird", "assets/bird.png", {frameWidth: 32, frameHeight: 32});
+    this.load.spritesheet("bird", "assets/bird.png", {frameWidth: 32, frameHeight: 24});
 }
 
 function create() {
     let bg = this.add.image(600, 300, "sky");
     bg.displayWidth = 1200;
 
-    player = this.physics.add.sprite(300, 300, "bird").setScale(1.5);
+    player = this.physics.add.sprite(300, 400, "bird").setScale(2);
     player.setCollideWorldBounds(true);
+    player.setGravity(0, 200);
 
     this.anims.create({
         key: "fly",
@@ -21,6 +23,25 @@ function create() {
     });
 
     cursors = this.input.keyboard.createCursorKeys();
+
+    let graphics = this.make.graphics();
+    //graphics.lineStyle(5, 0xff00ff, 1.0);
+    graphics.fillStyle(0x00aa00, 1);
+    graphics.fillRect(0, 0, 50, 300);
+    graphics.generateTexture("wall", 50, 300);
+
+    walls = this.physics.add.group();
+    woll = walls.create(800, 0, "wall");
+    //woll.setCollideWorldBounds(true);
+    woll.setVelocityX(-50);
+
+    woll = walls.create(800, 600, "wall");
+    //woll.setCollideWorldBounds(true);
+    //woll.setVelocityX(-50);
+
+    let wall = this.add.image(600, 150, "wall");
+
+    this.physics.add.collider(player, walls);
 }
 
 function update() {
@@ -41,7 +62,7 @@ var config = {
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: {y: 100},
+            gravity: {y: 0},
             debug: false
         }
     },
