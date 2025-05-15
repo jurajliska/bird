@@ -22,8 +22,6 @@ function create() {
         repeat: -1
     });
 
-    cursors = this.input.keyboard.createCursorKeys();
-
     let graphics = this.make.graphics();
     //graphics.lineStyle(5, 0xff00ff, 1.0);
     graphics.fillStyle(0x00aa00, 1);
@@ -31,17 +29,19 @@ function create() {
     graphics.generateTexture("wall", 50, 300);
 
     walls = this.physics.add.group();
-    woll = walls.create(800, 0, "wall");
-    //woll.setCollideWorldBounds(true);
-    woll.setVelocityX(-50);
 
-    woll = walls.create(800, 600, "wall");
-    //woll.setCollideWorldBounds(true);
-    //woll.setVelocityX(-50);
+    woll = walls.create(800, 60, "wall");
+    //woll.setVelocityX(-100);
+    woll = walls.create(800, 540, "wall");
+    //woll.setVelocityX(-100);
 
-    let wall = this.add.image(600, 150, "wall");
+    wallTimer = this.time.addEvent({delay: 3000, callback: makeWalls, callbackScope: this, loop: true});
 
-    this.physics.add.collider(player, walls);
+    //let wall = this.add.image(600, 150, "wall");
+
+    cursors = this.input.keyboard.createCursorKeys();
+
+    //this.physics.add.collider(player, walls);
 }
 
 function update() {
@@ -53,6 +53,13 @@ function update() {
     } else {
         player.setAngle(0);
     }
+}
+
+function makeWalls() {
+    woll = walls.create(1220, 60, "wall");
+    woll.setVelocityX(-100);
+    woll = walls.create(1220, 540, "wall");
+    woll.setVelocityX(-100);
 }
 
 var config = {
