@@ -1,6 +1,7 @@
 let player;
 let walls;
 let cursors;
+let speed = 80;
 
 function preload() {
     this.load.image("sky", "assets/sky.png");
@@ -11,9 +12,9 @@ function create() {
     let bg = this.add.image(600, 300, "sky");
     bg.displayWidth = 1200;
 
-    player = this.physics.add.sprite(300, 400, "bird").setScale(2);
+    player = this.physics.add.sprite(300, 300, "bird").setScale(2);
     player.setCollideWorldBounds(true);
-    player.setGravity(0, 200);
+    player.setGravity(0, 300);
 
     this.anims.create({
         key: "fly",
@@ -24,42 +25,47 @@ function create() {
 
     let graphics = this.make.graphics();
     //graphics.lineStyle(5, 0xff00ff, 1.0);
-    graphics.fillStyle(0x00aa00, 1);
-    graphics.fillRect(0, 0, 50, 300);
-    graphics.generateTexture("wall", 50, 300);
+    graphics.fillStyle(0x009900, 1);
+    graphics.fillRect(0, 0, 50, 320);
+    graphics.generateTexture("wall", 50, 320);
 
     walls = this.physics.add.group();
 
-    woll = walls.create(800, 60, "wall");
-    //woll.setVelocityX(-100);
-    woll = walls.create(800, 540, "wall");
-    //woll.setVelocityX(-100);
+    woll = walls.create(1200, 60, "wall");
+    woll.setVelocityX(-speed);
+    woll = walls.create(1200, 540, "wall");
+    woll.setVelocityX(-speed);
 
-    wallTimer = this.time.addEvent({delay: 3000, callback: makeWalls, callbackScope: this, loop: true});
-
-    //let wall = this.add.image(600, 150, "wall");
+    wallTimer = this.time.addEvent({delay: 3500, callback: makeWalls, callbackScope: this, loop: true});
 
     cursors = this.input.keyboard.createCursorKeys();
 
-    //this.physics.add.collider(player, walls);
+    this.physics.add.collider(player, walls);
 }
 
 function update() {
     player.anims.play("fly", true);
     
     if (cursors.space.isDown) {
-        player.setVelocityY(-100);
+        player.setVelocityY(-150);
         player.setAngle(-45);
     } else {
         player.setAngle(0);
     }
+
+    walls.children.iterate(function (child){
+        if (child.x < 0) {
+            child.disableBody(true, true);
+        }
+    })
 }
 
 function makeWalls() {
-    woll = walls.create(1220, 60, "wall");
-    woll.setVelocityX(-100);
-    woll = walls.create(1220, 540, "wall");
-    woll.setVelocityX(-100);
+    let y = Phaser.Math.Between(-90, 90)
+    woll = walls.create(1220, 60+y, "wall");
+    woll.setVelocityX(-speed);
+    woll = walls.create(1220, 540+y, "wall");
+    woll.setVelocityX(-speed);
 }
 
 var config = {
