@@ -2,6 +2,9 @@ let player;
 let walls;
 let cursors;
 let speed = 80;
+let speedText;
+let gameOver = false;
+let gameOverText;
 
 function preload() {
     this.load.image("sky", "assets/sky.png");
@@ -40,10 +43,19 @@ function create() {
 
     cursors = this.input.keyboard.createCursorKeys();
 
-    this.physics.add.collider(player, walls);
+    this.physics.add.collider(player, walls, hitWall, null, this);
+
+    speedText = this.add.text(8, 8, "Speed: " + speed, {fontSize: "16px", fill: "#000"});
+    speedText.setDepth(1);
+    gameOverText = this.add.text(500, 250, "Game over", {fontSize: "64px", fill: "#000"});
+    gameOverText.setVisible(false);
+    gameOverText.setDepth(1);
 }
 
 function update() {
+    if (gameOver){
+        player.anims.play("fly", false);
+    } else
     player.anims.play("fly", true);
     
     if (cursors.space.isDown) {
@@ -66,6 +78,12 @@ function makeWalls() {
     woll.setVelocityX(-speed);
     woll = walls.create(1220, 540+y, "wall");
     woll.setVelocityX(-speed);
+}
+
+function hitWall() {
+    gameOver = true;
+    this.physics.pause();
+    gameOverText.setVisible(true);
 }
 
 var config = {
