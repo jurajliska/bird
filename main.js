@@ -27,7 +27,6 @@ function create() {
     });
 
     let graphics = this.make.graphics();
-    //graphics.lineStyle(5, 0xff00ff, 1.0);
     graphics.fillStyle(0x009900, 1);
     graphics.fillRect(0, 0, 50, 320);
     graphics.generateTexture("wall", 50, 320);
@@ -35,9 +34,9 @@ function create() {
     walls = this.physics.add.group();
 
     woll = walls.create(1200, 60, "wall");
-    woll.setVelocityX(-speed);
+    //woll.setVelocityX(-speed);
     woll = walls.create(1200, 540, "wall");
-    woll.setVelocityX(-speed);
+    //woll.setVelocityX(-speed);
 
     wallTimer = this.time.addEvent({delay: 3500, callback: makeWalls, callbackScope: this, loop: true});
 
@@ -65,19 +64,22 @@ function update() {
         player.setAngle(0);
     }
 
-    walls.children.iterate(function (child){
-        if (child.x < 0) {
-            child.disableBody(true, true);
+    walls.getChildren().forEach(element => {
+        element.setVelocityX(-speed);
+        if (element.x < 0) {
+            speed += 5;
+            speedText.setText("Speed: " + speed);
+            walls.remove(element, true);
         }
-    })
+    });
 }
 
 function makeWalls() {
     let y = Phaser.Math.Between(-90, 90)
     woll = walls.create(1220, 60+y, "wall");
-    woll.setVelocityX(-speed);
+    //woll.setVelocityX(-speed);
     woll = walls.create(1220, 540+y, "wall");
-    woll.setVelocityX(-speed);
+    //woll.setVelocityX(-speed);
 }
 
 function hitWall() {
