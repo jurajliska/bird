@@ -69,6 +69,7 @@ function update() {
         if (element.x < 0) {
             speed += 5;
             speedText.setText("Speed: " + speed);
+            wallTimer.timeScale += 0.02;
             walls.remove(element, true);
         }
     });
@@ -85,7 +86,12 @@ function makeWalls() {
 function hitWall() {
     gameOver = true;
     this.physics.pause();
+    wallTimer.paused = true;
     gameOverText.setVisible(true);
+}
+
+function resetGame() {
+    gameOverText.setVisible(false);
 }
 
 var config = {
