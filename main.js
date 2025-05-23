@@ -60,6 +60,9 @@ function update() {
     if (cursors.space.isDown) {
         player.setVelocityY(-150);
         player.setAngle(-45);
+        if (gameOver) {
+            resetGame(this.physics);
+        }
     } else {
         player.setAngle(0);
     }
@@ -69,7 +72,7 @@ function update() {
         if (element.x < 0) {
             speed += 5;
             speedText.setText("Speed: " + speed);
-            wallTimer.timeScale += 0.02;
+            wallTimer.timeScale += 0.03;
             walls.remove(element, true);
         }
     });
@@ -90,8 +93,16 @@ function hitWall() {
     gameOverText.setVisible(true);
 }
 
-function resetGame() {
+function resetGame(physics) {
+    walls.clear(true, true);
+    physics.resume();
+    wallTimer.paused = false;
+    wallTimer.timeScale = 1;
     gameOverText.setVisible(false);
+    player.setPosition(300, 300);
+    player.setVelocityX(0);
+    speed = 80;
+    gameOver = false;
 }
 
 var config = {
